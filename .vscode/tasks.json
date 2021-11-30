@@ -1,0 +1,45 @@
+{
+    "tasks": [
+        {
+            "type": "cppbuild",
+            "label": "C/C++: g++.exe сборка активного файла",
+            "command": "C:\\MinGW\\bin\\g++.exe",
+            "args": [
+                "-static",
+                "${file}",
+                "-o",
+                "${fileDirname}\\${fileBasenameNoExtension}.exe",
+
+                "-I",
+                "${workspaceFolder}\\dependencies\\GLFW\\include",
+                "-L",
+                "${workspaceFolder}\\dependencies\\GLFW\\lib-mingw-w64",
+                "-lglfw3",
+
+                "-I",
+                "${workspaceFolder}\\dependencies\\GLEW\\include",
+                "-L",
+                "${workspaceFolder}\\dependencies\\GLEW\\lib\\Release\\Win32",
+                "-lglew32s",
+
+                "-lOpenGL32",
+                "-lgdi32",
+                "-lmingw32",
+                "-Wl,-u,___mingw_vsnprintf",
+                "-Wl,--defsym,___ms_vsnprintf=___mingw_vsnprintf",
+            ],
+            "options": {
+                "cwd": "${fileDirname}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "detail": "Задача создана отладчиком."
+        }
+    ],
+    "version": "2.0.0"
+}

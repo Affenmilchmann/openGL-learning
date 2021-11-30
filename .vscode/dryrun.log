@@ -1,0 +1,9 @@
+make.exe build -f "e:\dev\projs\C++\openGL_0.1\Makefile" --dry-run --always-make --keep-going --print-directory
+make: Entering directory 'e:/dev/projs/C++/openGL_0.1'
+g++ -c -static src/app.cpp -I dependencies\GLEW\include -I dependencies\GLFW\include
+g++ -c -static src/errorHandling.cpp -I dependencies\GLEW\include
+g++ -c -static src/Triangle.cpp -I dependencies\GLEW\include
+g++ -static app.o errorHandling.o Triangle.o -o src/app.exe -L dependencies\GLEW\lib\Release\Win32 -lglew32s -L dependencies\GLFW\lib-mingw-w64 -lglfw3 -lOpenGL32 -lgdi32 -lmingw32 -Wl,-u,___mingw_vsnprintf -Wl,--defsym,___ms_vsnprintf=___mingw_vsnprintf
+src/./app
+make: Leaving directory 'e:/dev/projs/C++/openGL_0.1'
+ 
