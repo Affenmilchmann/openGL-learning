@@ -75,34 +75,40 @@ int main(void)
 
     // vao vbo stuff
 
-    GLfloat vertices[] = {
+    GLfloat vertices1[] = {
         // first triangle
         -0.9f, -0.5f, 0.0f,  // left 
         -0.0f, -0.5f, 0.0f,  // right
         -0.45f, 0.5f, 0.0f,  // top 
+    }; 
+
+    GLfloat vertices2[] = {
         // second triangle
          0.0f,  0.5f, 0.0f,  // left
          0.9f,  0.5f, 0.0f,  // right
          0.45f,-0.5f, 0.0f   // top 
-    }; 
+    };
 
-    /*GLuint indices[] = {
-        0, 1, 3,   // first triangle
-        1, 2, 3    // second triangle
-    };*/
+    GLuint vao1, vbo1, vao2, vbo2;
+    glGenVertexArrays(1, &vao1);
+    glGenBuffers(1, &vbo1);
+    glGenVertexArrays(1, &vao2);
+    glGenBuffers(1, &vbo2);
 
-    GLuint vao, vbo;//, ebo;
-    glGenVertexArrays(1, &vao);
-    glGenBuffers(1, &vbo);
-    //glGenBuffers(1, &ebo);
+    //FIRST triangle binding and assigning data, vertex format
+    glBindVertexArray(vao1);
 
-    glBindVertexArray(vao);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo1);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices1), vertices1, GL_STATIC_DRAW);
 
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, (void*)0);
+    glEnableVertexAttribArray(0);
 
-    /*glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);*/
+    //SECOND triangle binding and assigning data, vertex format
+    glBindVertexArray(vao2);
+
+    glBindBuffer(GL_ARRAY_BUFFER, vbo2);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices2), vertices2, GL_STATIC_DRAW);
 
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, (void*)0);
     glEnableVertexAttribArray(0);
@@ -123,8 +129,6 @@ int main(void)
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     // enabling all we need
     glUseProgram(shaderProgram);
-    glBindVertexArray(vao);
-    //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
 
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window) && !end)
@@ -152,6 +156,9 @@ int main(void)
         /* Render here */
         glClear(GL_COLOR_BUFFER_BIT);
 
+        glBindVertexArray(vao1);
+        glDrawArrays(GL_TRIANGLES, 0, 6);
+        glBindVertexArray(vao2);
         glDrawArrays(GL_TRIANGLES, 0, 6);
 
         /* Swap front and back buffers */
