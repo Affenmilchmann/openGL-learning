@@ -18,13 +18,23 @@ const char* vertexShaderCode = R"glsl(
     }
 )glsl";
 
-const char* fragmentShaderCode = R"glsl(
+const char* fragmentShaderCode1 = R"glsl(
     #version 330 core
     out vec4 FragColor;
 
     void main()
     {
         FragColor = vec4(0.9f, 0.4f, 0.8f, 1.0f);
+    } 
+)glsl";
+
+const char* fragmentShaderCode2 = R"glsl(
+    #version 330 core
+    out vec4 FragColor;
+
+    void main()
+    {
+        FragColor = vec4(0.95f, 0.9f, 0.05f, 1.0f);
     } 
 )glsl";
 
@@ -53,25 +63,38 @@ int main(void)
 
     std::cout << glGetString(GL_VERSION) << std::endl;
 
-    // shaders 
+    // shaders initialization, compilation
     GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(vertexShader, 1, &vertexShaderCode, NULL);
     glCompileShader(vertexShader);
     logShaderError(vertexShader);
 
-    GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fragmentShader, 1, &fragmentShaderCode, NULL);
-    glCompileShader(fragmentShader);
-    logShaderError(fragmentShader);
+    GLuint fragmentShader1 = glCreateShader(GL_FRAGMENT_SHADER);
+    glShaderSource(fragmentShader1, 1, &fragmentShaderCode1, NULL);
+    glCompileShader(fragmentShader1);
+    logShaderError(fragmentShader1);
 
-    GLuint shaderProgram = glCreateProgram();
-    glAttachShader(shaderProgram, vertexShader);
-    glAttachShader(shaderProgram, fragmentShader);
-    glLinkProgram(shaderProgram);
-    logProgramError(shaderProgram);
+    GLuint fragmentShader2 = glCreateShader(GL_FRAGMENT_SHADER);
+    glShaderSource(fragmentShader2, 1, &fragmentShaderCode2, NULL);
+    glCompileShader(fragmentShader2);
+    logShaderError(fragmentShader2);
+
+    // programs init, linking
+    GLuint shaderProgram1 = glCreateProgram();
+    glAttachShader(shaderProgram1, vertexShader);
+    glAttachShader(shaderProgram1, fragmentShader1);
+    glLinkProgram(shaderProgram1);
+    logProgramError(shaderProgram1);
+
+    GLuint shaderProgram2 = glCreateProgram();
+    glAttachShader(shaderProgram2, vertexShader);
+    glAttachShader(shaderProgram2, fragmentShader2);
+    glLinkProgram(shaderProgram2);
+    logProgramError(shaderProgram2);
 
     glDeleteShader(vertexShader);
-    glDeleteShader(fragmentShader);  
+    glDeleteShader(fragmentShader1);  
+    glDeleteShader(fragmentShader2);
 
     // vao vbo stuff
 
@@ -127,8 +150,6 @@ int main(void)
     
     // this switches drawing to framed polygons
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-    // enabling all we need
-    glUseProgram(shaderProgram);
 
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window) && !end)
@@ -156,8 +177,10 @@ int main(void)
         /* Render here */
         glClear(GL_COLOR_BUFFER_BIT);
 
+        glUseProgram(shaderProgram1);
         glBindVertexArray(vao1);
         glDrawArrays(GL_TRIANGLES, 0, 6);
+        glUseProgram(shaderProgram2);
         glBindVertexArray(vao2);
         glDrawArrays(GL_TRIANGLES, 0, 6);
 
